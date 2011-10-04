@@ -4,7 +4,7 @@ import scala.collection.mutable.{Queue,HashMap,ListBuffer,Stack}
 import scala.xml._ 
 
 class ConfigManager(
-      val configFile:String){
+    val configFile:String){
     
     def this() = this("config.xml")
     

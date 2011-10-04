@@ -7,7 +7,7 @@ class RevisionParser{
 				return entry.split('[').last.dropRight(1)
 			}
 			if (entry.contains("Ready changed from [false] to [true]")){
-				return "Done"
+				return "Ready"
 			}
 		}
 		
