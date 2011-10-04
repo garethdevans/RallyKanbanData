@@ -2,7 +2,7 @@ package downloader
 
 class ReadyStateConverter {
 	def convert(kanbanStates:List[KanbanData]):List[KanbanData] = {
-		converter(kanbanStates, List())
+		converter(kanbanStates.sortWith((s,t) => s.date.getTime() < t.date.getTime()), List())
 	}
 	
 	private def converter(in:List[KanbanData], out:List[KanbanData]):List[KanbanData] = {

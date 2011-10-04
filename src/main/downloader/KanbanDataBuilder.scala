@@ -20,21 +20,21 @@ class KanbanDataBuilder(
 	private def getKanbanData(revisionsXml:Elem):List[KanbanData] = {
 		var kanbanDataStates = for{
 			r <- revisionsXml\"Revisions"\"Revision"
-			if (hasKanbanData(r))
+			if (hasStateData(r))
 		} yield new KanbanData(parseDesciption(r), parseDate(r))
 		kanbanDataStates.toList
 	}	
 		
-	private def hasKanbanData(revision:Node):Boolean = {
-	  getDesciption(revision).contains("KANBANSTATE") || getDesciption(revision).contains("READY changed from [false] to [true]")
+	private def hasStateData(revision:Node):Boolean = {
+	  getDescription(revision).contains("KANBANSTATE") || getDescription(revision).contains("READY changed from [false] to [true]") || getDescription(revision).contains("SCHEDULE STATE")
 	}
 	
-	private def getDesciption(revision:Node):String = {
+	private def getDescription(revision:Node):String = {
 	  (revision\"Description").text
 	}
 
 	private def parseDesciption(revision:Node):String = {
-	  revisionParser.parse(getDesciption(revision))
+	  revisionParser.parse(getDescription(revision))
 	}
 
 	private def parseDate(revision:Node):Date = {

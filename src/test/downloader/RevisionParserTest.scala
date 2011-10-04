@@ -6,6 +6,14 @@ import org.scalatest.matchers.ShouldMatchers
 class RevisionParserTest extends FlatSpec with ShouldMatchers {
 	val revisionParser = new RevisionParser
 
+	"A single Schedule state change" should "return the Activity state only" in {
+		revisionParser.parse("SCHEDULE STATE changed from [In-Progress] to [Completed]") should equal("Completed")
+	}
+
+	"Multiple changes with a Schedule state change" should "return the Activity state only" in {
+		revisionParser.parse("SCHEDULE STATE changed from [In-Progress] to [Completed], TASK REMAINING TOTAL changed from [1.0] to [0.0]") should equal("Completed")
+	}
+	
 	"A single Kanban state added" should "return the Activity state only" in {
 		revisionParser.parse("KANBANSTATE Added [Dev (Stories)]") should equal("Dev (Stories)")
 	}

@@ -5,9 +5,17 @@ import org.scalatest.matchers.ShouldMatchers
 import java.util.Date
 import java.text.{SimpleDateFormat,DateFormat};
 
-class KanbanDataFilterTest extends FlatSpec with ShouldMatchers{
-	val kanbanFilter = new KanbanDataFilter
+class KanbanDataFilterTest extends FlatSpec with ShouldMatchers{	
+	val kanbanFilter = new KanbanDataFilter(new FakeReadyStateConverter)
 	
+	"filter" should "call ready converter to convert ready states before filtering" in {
+		var fakeReadyStateConverter = new FakeReadyStateConverter
+		val kanbanFilter = new KanbanDataFilter(fakeReadyStateConverter)
+		val kanbanData = new KanbanData("Dev Started", new Date(1))
+		var kanbanStates = kanbanFilter.filter(List(kanbanData))
+		fakeReadyStateConverter.convertCounter should be (1)
+	}
+
 	"filter on a single item list" should "return the same value" in {
 		val kanbanData = new KanbanData("Dev Started", new Date(1))
 		var kanbanStates = kanbanFilter.filter(List(kanbanData))
@@ -35,4 +43,9 @@ class KanbanDataFilterTest extends FlatSpec with ShouldMatchers{
 		kanbanStates.exists(x => x.state == "Dev Started" && DateFormat.getDateInstance(DateFormat.SHORT).format(x.date) == "1/13/70") should be (true)
 		kanbanStates.exists(x => x.state == "Test Started" && DateFormat.getDateInstance(DateFormat.SHORT).format(x.date) == "1/13/70") should be (true)
 	}	
+	
+	private class FakeReadyStateConverter extends ReadyStateConverter{
+	  var convertCounter:Int = 0
+	  override def convert(kanbanStates:List[KanbanData]):List[KanbanData] = {convertCounter = convertCounter + 1; kanbanStates}
+	}
 }
