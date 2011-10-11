@@ -3,7 +3,7 @@ package downloader
 trait Revision {
   
 	def hasData(entry:String):Boolean = {
-		hasKanbanData(entry) && hasScrumData(entry) && hasTaskData(entry) && hasReadyData(entry) 
+		hasKanbanData(entry) || hasScrumData(entry) || hasTaskData(entry) || hasReadyData(entry) 
 	}
 	
 	def hasKanbanData(entry:String):Boolean = {
