@@ -1,1 +1,6 @@
 *.csv
+*.DS_Store
+config.xml
+configAll.xml
+bin
+data
