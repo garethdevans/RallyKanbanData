@@ -7,28 +7,27 @@ import java.util.Date;
 
 class KanbanDataBuilder(
     val repository:Repository,
-    val kanbanDataFilter:KanbanDataFilter,
+    val kanbanStateMatcher:KanbanStateMatcher,
     val revisionParser:RevisionParser,
-    val dateParser:DateParser){	
+    val dateParser:DateParser) extends Revision{	
 	
-	def this() = this(new Repository, new KanbanDataFilter, new RevisionParser, new DateParser)
+	def this() = this(new Repository, new KanbanStateMatcher, new RevisionParser, new DateParser)
 
 	def build(project:Project, revisionHistoryUri:String):List[KanbanData] = {
-		kanbanDataFilter.filter(getKanbanData(repository.getXml(project, revisionHistoryUri)))
+		val k = getKanbanData(repository.getXml(project, revisionHistoryUri))		
+		val states = kanbanStateMatcher.matchStates(project, k)
+		states.foreach(s=>println(s.state, s.date))
+		states
 	}
 
 	private def getKanbanData(revisionsXml:Elem):List[KanbanData] = {
 		var kanbanDataStates = for{
 			r <- revisionsXml\"Revisions"\"Revision"
-			if (hasStateData(r))
+			if (hasData(getDescription(r)))
 		} yield new KanbanData(parseDesciption(r), parseDate(r))
 		kanbanDataStates.toList
 	}	
-		
-	private def hasStateData(revision:Node):Boolean = {
-	  getDescription(revision).contains("KANBANSTATE") || getDescription(revision).contains("READY changed from [false] to [true]") || getDescription(revision).contains("SCHEDULE STATE")
-	}
-	
+			
 	private def getDescription(revision:Node):String = {
 	  (revision\"Description").text
 	}

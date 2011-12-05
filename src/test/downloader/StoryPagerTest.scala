@@ -3,6 +3,7 @@ package downloader
 import org.scalatest.FlatSpec
 import org.scalatest.matchers.ShouldMatchers
 import scala.xml._ 
+import java.util.Date
 
 class StoryPagerTest extends FlatSpec with ShouldMatchers {
   
@@ -15,6 +16,12 @@ class StoryPagerTest extends FlatSpec with ShouldMatchers {
     var stories = storyPager.page(project)
     stories.length should be (10)
     fakeStoryBuilder.buildCounter should be (5)
+    fakeStoryBuilder.startIndex.length should be (5)
+    fakeStoryBuilder.startIndex(4) should be (1)
+    fakeStoryBuilder.startIndex(3) should be (21)
+    fakeStoryBuilder.startIndex(2) should be (41)
+    fakeStoryBuilder.startIndex(1) should be (61)
+    fakeStoryBuilder.startIndex(0) should be (81)
   }
 
   "Page count" should "equal the TotalResultCount divided by default PageSize plus one when remainder not zero" in {
@@ -26,14 +33,23 @@ class StoryPagerTest extends FlatSpec with ShouldMatchers {
     var stories = storyPager.page(project)
     stories.length should be (12)
     fakeStoryBuilder.buildCounter should be (6)
+    fakeStoryBuilder.startIndex.length should be (6)
+    fakeStoryBuilder.startIndex(5) should be (1)
+    fakeStoryBuilder.startIndex(4) should be (21)
+    fakeStoryBuilder.startIndex(3) should be (41)
+    fakeStoryBuilder.startIndex(2) should be (61)
+    fakeStoryBuilder.startIndex(1) should be (81)
+    fakeStoryBuilder.startIndex(0) should be (101)
   }
   
   private class FakeStoryBuilder extends StoryBuilder{
     var buildCounter:Int = 0
-    val story = new Story("id", "name", "uri", "storyType", List())
+    var startIndex:List[Int] = List()
+    val story = new Story("id", "parentid", "name", "uri", "storyType", "Release", false, new Date(1), List())
     
     override def build(project:Project, page:Int) = { 
       buildCounter = buildCounter + 1
+      startIndex = page :: startIndex
       List(story,story)
     } 
   }

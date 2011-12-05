@@ -1,14 +1,14 @@
 package downloader
 
 class KanbanStateMatcher {
-
+  
 	def matchStates(project:Project, kanbanStates:List[KanbanData]):List[KanbanData] = {
 		var states = for {
 		  s <- project.kanbanStates		  
 		} yield getState(kanbanStates, s)
-		states.toList
+		states.toList 
 	}
-	
+
 	private def getState(kanbanStates:List[KanbanData], state:String):KanbanData = {
 		if(kanbanStates.exists(x=>x.state.trim.toUpperCase() == state.trim.toUpperCase())){
 		  findState(kanbanStates, state)

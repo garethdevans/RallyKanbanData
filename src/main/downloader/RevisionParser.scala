@@ -1,16 +1,19 @@
 package downloader
 
-class RevisionParser{
+class RevisionParser extends Revision{
 	def parse(revision:String):String = {
 		revision.split(",") foreach {(entry) => 
-			if (entry.contains("KANBANSTATE") || entry.contains("SCHEDULE STATE")){
-				return entry.split('[').last.dropRight(1)
+			if (hasKanbanData(entry) || hasScrumData(entry)){
+				return entry.split('[').last.trim.dropRight(1)
 			}
-			if (entry.contains("Ready changed from [false] to [true]")){
+			if (hasReadyData(entry)){
 				return "Ready"
+			}
+			if (hasTaskData(entry)){
+				return "Defined"
 			}
 		}
 		
-		throw new IllegalArgumentException("revision did not contain Kanban data.")
+		throw new IllegalArgumentException("revision did not contain Kanban data. " + revision.toUpperCase())
 	}
 }

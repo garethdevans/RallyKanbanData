@@ -8,7 +8,7 @@ class ReadyStateConverter {
 	private def converter(in:List[KanbanData], out:List[KanbanData]):List[KanbanData] = {
 	  if(in == Nil || in.head == Nil) return out.reverse	  
 	  
-	  if(in.head.state == "Ready" && out.head != Nil){
+	  if(in.head.state == "Ready" && out != Nil && out.head != Nil){
 		  converter(in.tail, new KanbanData(createDoneState(out.head.state), in.head.date) :: out)
 	  }
 	  else{

@@ -11,5 +11,3 @@ object Runner {
 	}
   }
 }
-
-// https://rally1.rallydev.com/slm/webservice/1.27/hierarchicalrequirement?query(project = https://rally1.rallydev.com/slm/webservice/1.27/project/3684505712)

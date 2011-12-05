@@ -14,12 +14,12 @@ class Project(
 	var stories: List[Story] = List()
 		
 	def toCsv = {
-		withPrintWriter(new File(name + ".csv")){
-		  writer => 
-		    writer.println("Id,Name,Story Type," + kanbanStates.reduceLeft(_ + "," + _))
-		    stories foreach{(s) =>
-		      writer.println(s.id + "," + s.name + "," + s.storyType + "," + kanbanDatesFor(s))
-			}
+		withPrintWriter(new File("data/" + name + ".csv")){
+			writer => 
+		    	writer.println("Id,ParentId,Name,Story Type,HasChildren,Release,CreationDate," + kanbanStates.reduceLeft(_ + "," + _))
+		    	stories foreach{(s) =>
+		    		writer.println(s.id + "," + s.parentId + "," + s.name + "," + s.storyType + "," + s.hasChildren + "," + s.release + "," + format(s.creationDate) + "," + printStates(s))
+		    }
 		}
 	}
 	
@@ -32,18 +32,14 @@ class Project(
 		}		
 	}
 	
-	private def kanbanDatesFor(story:Story):String = {
-		var line = for {
-		  k <- kanbanStates		  
-		} yield findState(story, k)
-		line.reduceLeft(_ + "," + _)
-	}
-
-	private def findState(story:Story, state:String):String = {
-	  if(story.kanbanStates.exists(x => x.state == state)) format(story.kanbanStates.filter(x => x.state == state).head.date) else ""
+	private def printStates(story:Story):String = {
+	  var states = for {
+		  k <- story.kanbanStates
+	  } yield format(k.date)
+	  states.reduceLeft(_ + "," + _)
 	}
 	
 	private def format(date:Date):String = {
-	  new SimpleDateFormat("dd/MM/yyyy").format(date)
+	  if (date == null) "" else new SimpleDateFormat("dd/MM/yyyy").format(date)
 	}
 }

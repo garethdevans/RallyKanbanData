@@ -8,16 +8,16 @@ import java.util.Date
 class KanbanDataBuilderTest extends FlatSpec with ShouldMatchers{
 
 	"build" should "call filter once" in {
-		var fakeKanbanDataFilter = new FakeKanbanDataFilter
-		var kanbanDataBuilder = new KanbanDataBuilder(new FakeRepository, fakeKanbanDataFilter, new FakeRevisionParser, new FakeDateParser)
+		var fakeKanbanStateMatcher = new FakeKanbanStateMatcher
+		var kanbanDataBuilder = new KanbanDataBuilder(new FakeRepository, fakeKanbanStateMatcher, new FakeRevisionParser, new FakeDateParser)
 		var kanbanStates = kanbanDataBuilder.build(new Project("name", "uri", List(), "username", "password"), "revisionHistoryUri")
-		fakeKanbanDataFilter.filterCounter should equal (1)
+		fakeKanbanStateMatcher.matchCounter should equal (1)
 	}
 
 	"build" should "add only Descriptions containing KANBANSTATE, SCHEDULE STATE and READY changes" in {
-		var fakeKanbanDataFilter = new FakeKanbanDataFilter
+		var fakeKanbanStateMatcher = new FakeKanbanStateMatcher
 		var fakeRevisionParser = new FakeRevisionParser
-		var kanbanDataBuilder = new KanbanDataBuilder(new FakeRepository, fakeKanbanDataFilter, fakeRevisionParser, new FakeDateParser)
+		var kanbanDataBuilder = new KanbanDataBuilder(new FakeRepository, fakeKanbanStateMatcher, fakeRevisionParser, new FakeDateParser)
 		var kanbanStates = kanbanDataBuilder.build(new Project("name", "uri", List(), "username", "password"), "revisionHistoryUri")		
 		kanbanStates.length should be (4)
 		kanbanStates.count(k => k.state == "KANBANSTATE changed from [Dev (Stories)] to [Release Ready]" && k.date.getTime() == 12345 ) should be (1)
@@ -27,9 +27,9 @@ class KanbanDataBuilderTest extends FlatSpec with ShouldMatchers{
 		fakeRevisionParser.parseCounter should be (4)
 	}
 
-	private class FakeKanbanDataFilter extends KanbanDataFilter{
-		var filterCounter = 0
-		override def filter(kanbanStates:List[KanbanData]):List[KanbanData] = {filterCounter = filterCounter + 1; kanbanStates}
+	private class FakeKanbanStateMatcher extends KanbanStateMatcher{
+		var matchCounter = 0
+		override def matchStates(project:Project, kanbanStates:List[KanbanData]):List[KanbanData] = {matchCounter = matchCounter + 1; kanbanStates}
 	}
 
 	private class FakeRevisionParser extends RevisionParser{
