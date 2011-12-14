@@ -1,14 +1,14 @@
-This application can be used to download Rally Kanban data into a CSV file.
+This application can be used to download Rally Scrum or Kanban data into a CSV file based on state chages stored in the revision log and creation dates of stories.
 
 The config contains all projects to collect data for. Each project will have a separate CSV file created.
 
-Be careful not to include spaces new commas in the kanbanStates element of the config as it will not match results returned from Rally. A correct config is below without spaces.
+Be careful not to include spaces in commas in the kanbanStates element of the config as it will not match results returned from Rally. A correct config is below without spaces.
 
 <kanbanStates>Input Queue,Analysis,Analysis Done,BVI in Dev/Test,Dev (Stories),Dev (Stories) Done,Test (Stories),Test (Stories) Done,Integration,Release Ready,Release Ready Done,Released</kanbanStates>
 
-Rally has a ready flag for each state, if you want to see dates for when an item is marked as ready in a state, add an extra state wit " Done" appended to the end e.g.
+Rally has a ready flag for each state, if you want to see dates for when an item is marked as ready in a state, add an extra state with " Done" appended to the end e.g.
 
 Analysis
 Analysis Done
 
-This will record both the Analysis timestamp and when ready was marked whilst in Analysis (stored in Analysis Done column)
+This will record both the Analysis timestamp and when ready was marked whilst in Analysis (stored in Analysis Done column).

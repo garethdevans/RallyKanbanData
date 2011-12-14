@@ -4,11 +4,11 @@ class ProjectBuilder(){
     private val storyPager = new StoryPager
 	private val configManager = new ConfigManager
 	
-	def buildAll: List[Project] = {
-		var projects = configManager.projects
-		projects foreach {(project) =>
+	def output = {
+		configManager.projects foreach {(project) =>
 			project.stories = storyPager.page(project)
+			project.toCsv
 		}
-		return projects	
 	}
+    
 }

@@ -15,9 +15,7 @@ class KanbanDataBuilder(
 
 	def build(project:Project, revisionHistoryUri:String):List[KanbanData] = {
 		val k = getKanbanData(repository.getXml(project, revisionHistoryUri))		
-		val states = kanbanStateMatcher.matchStates(project, k)
-		states.foreach(s=>println(s.state, s.date))
-		states
+		kanbanStateMatcher.matchStates(project.kanbanStates, k)				
 	}
 
 	private def getKanbanData(revisionsXml:Elem):List[KanbanData] = {

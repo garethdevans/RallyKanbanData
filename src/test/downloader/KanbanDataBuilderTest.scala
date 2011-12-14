@@ -29,7 +29,7 @@ class KanbanDataBuilderTest extends FlatSpec with ShouldMatchers{
 
 	private class FakeKanbanStateMatcher extends KanbanStateMatcher{
 		var matchCounter = 0
-		override def matchStates(project:Project, kanbanStates:List[KanbanData]):List[KanbanData] = {matchCounter = matchCounter + 1; kanbanStates}
+		override def matchStates(nameStates:List[String], kanbanStates:List[KanbanData]):List[KanbanData] = {matchCounter = matchCounter + 1; kanbanStates}
 	}
 
 	private class FakeRevisionParser extends RevisionParser{

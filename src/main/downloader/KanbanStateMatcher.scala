@@ -1,12 +1,15 @@
 package downloader
 
-class KanbanStateMatcher {
+class KanbanStateMatcher(blankDateFiller:BlankDateFiller) {
   
-	def matchStates(project:Project, kanbanStates:List[KanbanData]):List[KanbanData] = {
+	def this() = this(new BlankDateFiller())
+	
+	def matchStates(stateNames:List[String], kanbanStates:List[KanbanData]):List[KanbanData] = {
 		var states = for {
-		  s <- project.kanbanStates		  
+		  s <- stateNames		  
 		} yield getState(kanbanStates, s)
-		states.toList 
+		states.foreach(s=>println(s.state, s.date))
+		blankDateFiller.fill(stateNames, states.toList) 
 	}
 
 	private def getState(kanbanStates:List[KanbanData], state:String):KanbanData = {
