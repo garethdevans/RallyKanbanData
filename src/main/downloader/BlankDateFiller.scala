@@ -12,10 +12,11 @@ class BlankDateFiller {
 	  
 	  stateNames.reverse foreach({ name =>
 	  	maxDate = getMaxDateForState(name, kanbanStates)
-	    for{
+	    val foundStates = for{
 	      s <- kanbanStates.filter(x => x.state.trim.toUpperCase() == name.trim.toUpperCase())
 	    } yield if (maxDate == null && maxPreviousDate !=null) states.append(fixKanbanDate(maxPreviousDate, s)) else states.append(fixKanbanDate(maxDate, s))
-		maxPreviousDate = maxDate
+		if (foundStates.length == 0) states.append(new KanbanData(name, maxPreviousDate))
+	    if (maxDate != null) maxPreviousDate = maxDate
 	  })  
 	  
 	  states.toList.reverse

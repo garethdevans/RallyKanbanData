@@ -1,0 +1,12 @@
+#!/bin/bash
+cd bin
+scala -cp ../lib/scalatest-1.6.1.jar org.scalatest.tools.Runner -p . -o -s downloader.BlankDateFillerTest
+scala -cp ../lib/scalatest-1.6.1.jar org.scalatest.tools.Runner -p . -o -s downloader.ConfigManagerTest
+scala -cp ../lib/scalatest-1.6.1.jar org.scalatest.tools.Runner -p . -o -s downloader.DateParserTest
+scala -cp ../lib/scalatest-1.6.1.jar org.scalatest.tools.Runner -p . -o -s downloader.KanbanDataBuilderTest
+scala -cp ../lib/scalatest-1.6.1.jar org.scalatest.tools.Runner -p . -o -s downloader.KanbanDataFilterTest
+scala -cp ../lib/scalatest-1.6.1.jar org.scalatest.tools.Runner -p . -o -s downloader.KanbanStateMatcherTest
+scala -cp ../lib/scalatest-1.6.1.jar org.scalatest.tools.Runner -p . -o -s downloader.ReadyStateConverterTest
+scala -cp ../lib/scalatest-1.6.1.jar org.scalatest.tools.Runner -p . -o -s downloader.RevisionParserTest
+scala -cp ../lib/scalatest-1.6.1.jar org.scalatest.tools.Runner -p . -o -s downloader.StoryBuilderTest
+scala -cp ../lib/scalatest-1.6.1.jar org.scalatest.tools.Runner -p . -o -s downloader.StoryPagerTest
